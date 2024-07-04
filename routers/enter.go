@@ -12,8 +12,8 @@ type RouterGroup struct {
 func InitRouter() *gin.Engine {
 	gin.SetMode(global.Config.System.Env)
 	router := gin.Default()
-	apiRouterGroup := router.Group("api")
-	myRouterGroup := RouterGroup{apiRouterGroup}
-	myRouterGroup.SystemRouter()
+	apiGroup := router.Group("api")
+	apiRouterGroup := RouterGroup{apiGroup}
+	apiRouterGroup.SystemRouter()
 	return router
 }
