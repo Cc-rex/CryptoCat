@@ -1,0 +1,2176 @@
+basePath: /
+definitions:
+  article_api.CalendarResponse:
+    properties:
+      count:
+        type: integer
+      date:
+        type: string
+    type: object
+  article_api.CollResponse:
+    properties:
+      abstract:
+        description: 文章简介
+        type: string
+      banner_id:
+        description: 文章封面id
+        type: integer
+      banner_url:
+        description: 文章封面
+        type: string
+      category:
+        description: 文章分类
+        type: string
+      collects_count:
+        description: 收藏量
+        type: integer
+      comment_count:
+        description: 评论量
+        type: integer
+      content:
+        description: 文章内容
+        type: string
+      created_at:
+        type: string
+      id:
+        description: es的id
+        type: string
+      keyword:
+        description: 关键字
+        type: string
+      like_count:
+        description: 点赞量
+        type: integer
+      link:
+        description: 原文链接
+        type: string
+      look_count:
+        description: 浏览量
+        type: integer
+      source:
+        description: 文章来源
+        type: string
+      tags:
+        description: 文章标签
+        items:
+          type: string
+        type: array
+      title:
+        description: 文章标题
+        type: string
+      updated_at:
+        description: 更新时间
+        type: string
+      user_avatar:
+        description: 用户头像
+        type: string
+      user_id:
+        description: 用户id
+        type: integer
+      user_nick_name:
+        description: 用户昵称
+        type: string
+    type: object
+  ctype.ArticleDetailRequest:
+    properties:
+      title:
+        type: string
+    type: object
+  ctype.ArticleRequest:
+    properties:
+      abstract:
+        description: 文章简介
+        type: string
+      banner_id:
+        description: 文章封面id
+        type: integer
+      category:
+        description: 文章分类
+        type: string
+      content:
+        description: 文章内容
+        type: string
+      link:
+        description: 原文链接
+        type: string
+      source:
+        description: 文章来源
+        type: string
+      tags:
+        description: 文章标签
+        items:
+          type: string
+        type: array
+      title:
+        description: 文章标题
+        type: string
+    required:
+    - content
+    - title
+    type: object
+  ctype.ArticleUpdateRequest:
+    properties:
+      abstract:
+        description: 文章简介
+        type: string
+      banner_id:
+        description: 文章封面id
+        type: integer
+      category:
+        description: 文章分类
+        type: string
+      content:
+        description: 文章内容
+        type: string
+      id:
+        type: string
+      link:
+        description: 原文链接
+        type: string
+      source:
+        description: 文章来源
+        type: string
+      tags:
+        description: 文章标签
+        items:
+          type: string
+        type: array
+      title:
+        description: 文章标题
+        type: string
+    type: object
+  ctype.CommentRequest:
+    properties:
+      article_id:
+        type: string
+      content:
+        type: string
+      parent_comment_id:
+        description: 父评论id
+        type: integer
+    required:
+    - article_id
+    - content
+    type: object
+  ctype.DeleteIDList:
+    properties:
+      id_list:
+        items:
+          type: string
+        type: array
+    type: object
+  ctype.DeleteRequest:
+    properties:
+      id_list:
+        items:
+          type: integer
+        type: array
+    type: object
+  ctype.ESIDListRequest:
+    properties:
+      id_list:
+        items:
+          type: string
+        type: array
+    required:
+    - id_list
+    type: object
+  ctype.ESIDRequest:
+    properties:
+      id:
+        type: string
+    type: object
+  ctype.FileUploadResponse:
+    properties:
+      file_name:
+        type: string
+      is_success:
+        type: boolean
+      msg:
+        type: string
+    type: object
+  ctype.ImageNameResponse:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      path:
+        type: string
+    type: object
+  ctype.ImageSort:
+    properties:
+      image_id:
+        type: integer
+      sort:
+        type: integer
+    type: object
+  ctype.ImageType:
+    enum:
+    - 1
+    - 2
+    type: integer
+    x-enum-comments:
+      Local: 本地
+      Qiniu: 七牛云
+    x-enum-varnames:
+    - Local
+    - Qiniu
+  ctype.ImageUpdateRequest:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    required:
+    - id
+    - name
+    type: object
+  ctype.LoginRequest:
+    properties:
+      password:
+        type: string
+      user_name:
+        type: string
+    required:
+    - password
+    - user_name
+    type: object
+  ctype.MenuNameResponse:
+    properties:
+      id:
+        type: integer
+      path:
+        type: string
+      title:
+        type: string
+    type: object
+  ctype.MenuRequest:
+    properties:
+      abstract:
+        items:
+          type: string
+        type: array
+      abstract_time:
+        description: 切换的时间，单位秒
+        type: integer
+      banner_time:
+        description: 切换的时间，单位秒
+        type: integer
+      image_sort_list:
+        description: 具体图片的顺序
+        items:
+          $ref: '#/definitions/ctype.ImageSort'
+        type: array
+      path:
+        type: string
+      slogan:
+        type: string
+      sort:
+        description: 菜单的序号
+        type: integer
+      title:
+        type: string
+    required:
+    - path
+    - sort
+    - title
+    type: object
+  ctype.Message:
+    properties:
+      content:
+        description: 消息内容
+        type: string
+      created_at:
+        description: 最新的消息时间
+        type: string
+      message_count:
+        description: 消息条数
+        type: integer
+      rev_user_avatar:
+        type: string
+      rev_user_id:
+        description: 接收人id
+        type: integer
+      rev_user_nick_name:
+        type: string
+      send_user_avatar:
+        type: string
+      send_user_id:
+        description: 发送人id
+        type: integer
+      send_user_nick_name:
+        type: string
+    type: object
+  ctype.MessageHistoryRequest:
+    properties:
+      user_id:
+        type: integer
+    required:
+    - user_id
+    type: object
+  ctype.MessageRequest:
+    properties:
+      content:
+        description: 消息内容
+        type: string
+      rev_user_id:
+        description: 接收人id
+        type: integer
+      send_user_id:
+        description: 发送人id
+        type: integer
+    required:
+    - content
+    - rev_user_id
+    - send_user_id
+    type: object
+  ctype.MsgType:
+    enum:
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    type: integer
+    x-enum-comments:
+      ImageMsg: 发送图片
+      InRoomMsg: 进入聊天室
+      OutRoomMsg: 退出聊天室
+      SystemMsg: 发送系统消息
+      TextMsg: 发送文本消息
+    x-enum-varnames:
+    - InRoomMsg
+    - TextMsg
+    - ImageMsg
+    - SystemMsg
+    - OutRoomMsg
+  ctype.RegisterRequest:
+    properties:
+      email:
+        type: string
+      nick_name:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - email
+    - nick_name
+    - password
+    - username
+    type: object
+  ctype.SignStatus:
+    enum:
+    - 1
+    - 2
+    - 3
+    type: integer
+    x-enum-comments:
+      SignEmail: email
+      SignGitee: gitee
+      SignQQ: QQ
+    x-enum-varnames:
+    - SignQQ
+    - SignGitee
+    - SignEmail
+  ctype.Status:
+    enum:
+    - 1
+    - 2
+    - 3
+    - 4
+    type: integer
+    x-enum-comments:
+      PermissionAdmin: Admin
+      PermissionForbiddenUser: Forbidden User
+      PermissionUser: User
+      PermissionVisitor: Visitor
+    x-enum-varnames:
+    - PermissionAdmin
+    - PermissionUser
+    - PermissionVisitor
+    - PermissionForbiddenUser
+  ctype.TagRequest:
+    properties:
+      title:
+        type: string
+    required:
+    - title
+    type: object
+  ctype.TagsResponse:
+    properties:
+      article_id_list:
+        items:
+          type: string
+        type: array
+      count:
+        type: integer
+      created_at:
+        type: string
+      tag:
+        type: string
+    type: object
+  ctype.UpdatePasswordRequest:
+    properties:
+      new_pwd:
+        description: 新密码
+        type: string
+      old_pwd:
+        description: 旧密码
+        type: string
+    type: object
+  ctype.UserStatusRequest:
+    properties:
+      nick_name:
+        description: 防止用户昵称非法，管理员有能力修改
+        type: string
+      status:
+        allOf:
+        - $ref: '#/definitions/ctype.Status'
+        enum:
+        - 1
+        - 2
+        - 3
+        - 4
+      user_id:
+        type: integer
+    required:
+    - status
+    - user_id
+    type: object
+  menu_api.Banner:
+    properties:
+      id:
+        type: integer
+      path:
+        type: string
+    type: object
+  menu_api.MenuAllResponse:
+    properties:
+      abstract:
+        description: 简介
+        items:
+          type: string
+        type: array
+      abstract_time:
+        description: 简介的切换时间
+        type: integer
+      banner_time:
+        description: 菜单图片的切换时间 为 0 表示不切换
+        type: integer
+      banners:
+        items:
+          $ref: '#/definitions/menu_api.Banner'
+        type: array
+      created_at:
+        type: string
+      id:
+        type: integer
+      path:
+        type: string
+      slogan:
+        description: slogan
+        type: string
+      sort:
+        description: 菜单的顺序
+        type: integer
+      title:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.ArticleModel:
+    properties:
+      abstract:
+        description: 文章简介
+        type: string
+      banner_id:
+        description: 文章封面id
+        type: integer
+      banner_url:
+        description: 文章封面
+        type: string
+      category:
+        description: 文章分类
+        type: string
+      collects_count:
+        description: 收藏量
+        type: integer
+      comment_count:
+        description: 评论量
+        type: integer
+      content:
+        description: 文章内容
+        type: string
+      created_at:
+        description: 创建时间
+        type: string
+      id:
+        description: es的id
+        type: string
+      keyword:
+        description: 关键字
+        type: string
+      like_count:
+        description: 点赞量
+        type: integer
+      link:
+        description: 原文链接
+        type: string
+      look_count:
+        description: 浏览量
+        type: integer
+      source:
+        description: 文章来源
+        type: string
+      tags:
+        description: 文章标签
+        items:
+          type: string
+        type: array
+      title:
+        description: 文章标题
+        type: string
+      updated_at:
+        description: 更新时间
+        type: string
+      user_avatar:
+        description: 用户头像
+        type: string
+      user_id:
+        description: 用户id
+        type: integer
+      user_nick_name:
+        description: 用户昵称
+        type: string
+    type: object
+  models.BannerModel:
+    properties:
+      created_at:
+        type: string
+      hash:
+        description: 图片的hash值，用于判断重复图片
+        type: string
+      id:
+        type: integer
+      image_type:
+        allOf:
+        - $ref: '#/definitions/ctype.ImageType'
+        description: 图片的类型， 本地还是七牛
+      name:
+        description: 图片名称
+        type: string
+      path:
+        description: 图片路径
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.ChatModel:
+    properties:
+      addr:
+        type: string
+      avatar:
+        type: string
+      content:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      ip:
+        type: string
+      is_group:
+        description: 是否是群组消息
+        type: boolean
+      msg_type:
+        $ref: '#/definitions/ctype.MsgType'
+      nick_name:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.CommentModel:
+    properties:
+      article_id:
+        description: 文章id
+        type: string
+      comment_count:
+        description: 子评论数
+        type: integer
+      comment_model:
+        allOf:
+        - $ref: '#/definitions/models.CommentModel'
+        description: 父级评论
+      content:
+        description: 评论内容
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      like_count:
+        description: 点赞数
+        type: integer
+      parent_comment_id:
+        description: 父评论id
+        type: integer
+      sub_comments:
+        description: 子评论列表
+        items:
+          $ref: '#/definitions/models.CommentModel'
+        type: array
+      updated_at:
+        type: string
+      user:
+        allOf:
+        - $ref: '#/definitions/models.UserModel'
+        description: 关联的用户
+      user_id:
+        description: 评论的用户
+        type: integer
+    type: object
+  models.MessageModel:
+    properties:
+      content:
+        description: 消息内容
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      is_read:
+        description: 接收方是否查看
+        type: boolean
+      rev_user_avatar:
+        type: string
+      rev_user_id:
+        description: 接收人id
+        type: integer
+      rev_user_nick_name:
+        type: string
+      send_user_avatar:
+        type: string
+      send_user_id:
+        description: 发送人id
+        type: integer
+      send_user_nick_name:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.UserModel:
+    properties:
+      addr:
+        type: string
+      avatar:
+        type: string
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      ip:
+        type: string
+      nick_name:
+        type: string
+      sign_status:
+        $ref: '#/definitions/ctype.SignStatus'
+      status:
+        $ref: '#/definitions/ctype.Status'
+      tel:
+        type: string
+      token:
+        type: string
+      updated_at:
+        type: string
+      user_name:
+        type: string
+    type: object
+  resp.ListResponse-models_BannerModel:
+    properties:
+      count:
+        type: integer
+      list:
+        $ref: '#/definitions/models.BannerModel'
+    type: object
+  resp.Response:
+    properties:
+      code:
+        type: integer
+      data: {}
+      msg:
+        type: string
+    type: object
+host: 127.0.0.1:8080
+info:
+  contact: {}
+  description: CryptoCat API docs
+  title: CryptoCat
+  version: "1.0"
+paths:
+  /api/articles:
+    delete:
+      consumes:
+      - application/json
+      description: Delete the article from the ES based on the article ID
+      parameters:
+      - description: Request body for deleting a new article including title, content,
+          and optional banner ID
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/ctype.DeleteIDList'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Confirms that the article has been successfully added to the
+            database.
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "400":
+          description: Invalid request body or failure in content sanitization
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "404":
+          description: Banner or user not found
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "409":
+          description: Duplicate article entries found
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Failed to create article due to internal server error
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: Delete a new article
+      tags:
+      - Article Management
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a paginated list of articles based on search criteria
+        such as tags and fields like title and content. The response filters out empty
+        values.
+      parameters:
+      - description: Page number of the results
+        in: query
+        name: page
+        type: integer
+      - description: Number of results per page
+        in: query
+        name: size
+        type: integer
+      - description: Tag to filter articles by
+        in: query
+        name: tag
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: A list of articles with pagination details
+          schema:
+            items:
+              $ref: '#/definitions/models.ArticleModel'
+            type: array
+        "400":
+          description: Invalid query parameters or binding errors
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Failed to retrieve articles due to internal server error
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: List articles with pagination and filters
+      tags:
+      - Article Management
+    post:
+      consumes:
+      - application/json
+      description: Adds a new article entry to the ES. The process includes content
+        sanitization to remove potentially harmful scripts, auto-generating an abstract
+        if not provided, and assigning a random banner if none specified.
+      parameters:
+      - description: Request body for creating a new article including title, content,
+          and optional banner ID
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/ctype.ArticleRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Confirms that the article has been successfully added to the
+            database.
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "400":
+          description: Invalid request body or failure in content sanitization
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "404":
+          description: Banner or user not found
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "409":
+          description: Duplicate article entries found
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Failed to create article due to internal server error
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: Create a new article
+      tags:
+      - Article Management
+    put:
+      consumes:
+      - application/json
+      description: Updates an existing article's details such as title, content, banner,
+        and more based on provided values. Empty fields are ignored in the update
+        process.
+      parameters:
+      - description: Request body for updating an article including new values for
+          fields like title, abstract, banner ID, and more
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/ctype.ArticleUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Confirms that the article has been successfully updated.
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "400":
+          description: Invalid request body or argument errors
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "404":
+          description: Banner or article not found
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Failed to update the article due to internal server error
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: Update an article
+      tags:
+      - Article Management
+  /api/articles/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Gets detailed information for a specified article ID, including
+        incrementing the view count via Redis.
+      parameters:
+      - description: The ID of the article to retrieve
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Detailed information about the article, including content and
+            metadata
+          schema:
+            $ref: '#/definitions/models.ArticleModel'
+        "400":
+          description: Invalid article ID specified
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "404":
+          description: Article not found
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Failed to retrieve article details due to internal server error
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: Retrieve article details by ID
+      tags:
+      - Article Management
+  /api/articles/calendar:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a calendar view of articles published, showing the count
+        of articles per day from the current date back to one year.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: A list of dates and the count of articles published on each
+            date.
+          schema:
+            items:
+              $ref: '#/definitions/article_api.CalendarResponse'
+            type: array
+        "400":
+          description: Invalid query parameters
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Failed to retrieve data due to internal server error
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: Get article calendar view
+      tags:
+      - Article Management
+  /api/articles/collect:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a batch of article collections based on the list of article
+        IDs provided, and updates the collect count for each article.
+      parameters:
+      - description: Request body containing a list of article IDs to be uncollected
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/ctype.ESIDListRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Indicates the number of articles successfully uncollected.
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "400":
+          description: Invalid request body or argument errors
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "403":
+          description: Unauthorized request or action not allowed
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Failed to delete collections due to internal server error
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: Batch delete article collections
+      tags:
+      - Article Management
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of articles collected by the user, including the
+        article details and the date each was collected.
+      parameters:
+      - description: Page number of the collection list
+        in: query
+        name: page
+        type: integer
+      - description: Number of collections per page
+        in: query
+        name: size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of collected articles with pagination details
+          schema:
+            items:
+              $ref: '#/definitions/article_api.CollResponse'
+            type: array
+        "400":
+          description: Invalid query parameters or binding errors
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "403":
+          description: Unauthorized access or invalid credentials
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Failed to retrieve collections due to internal server error
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: Show the list of article collections
+      tags:
+      - Article Management
+    post:
+      consumes:
+      - application/json
+      description: Allows a user to either collect or uncollect an article based on
+        its current collection status. If the article is not already collected, it
+        will be collected; if it is already collected, the collection will be cancelled.
+      parameters:
+      - description: Request body containing the ID of the article to be collected
+          or uncollected
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/ctype.ESIDRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Indicates successful uncollection of the article
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "400":
+          description: Invalid request body or argument errors
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "404":
+          description: Article not found or no longer available
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Failed to update the collection status due to internal server
+            error
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: Create article collection
+      tags:
+      - Article Management
+  /api/articles/detail:
+    get:
+      consumes:
+      - application/json
+      description: Gets detailed information for a specified article title, including
+        incrementing the view count via Redis.
+      parameters:
+      - description: The ID of the article to retrieve
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Detailed information about the article, including content and
+            metadata
+          schema:
+            $ref: '#/definitions/ctype.ArticleDetailRequest'
+        "400":
+          description: Invalid article ID specified
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "404":
+          description: Article not found
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Failed to retrieve article details due to internal server error
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: Retrieve article details by title
+      tags:
+      - Article Management
+  /api/articles/like:
+    post:
+      consumes:
+      - application/json
+      description: Registers a 'like' for an article by its ID, updating the like
+        count in Redis.
+      parameters:
+      - description: Request body containing the ID of the article to be liked
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/ctype.ESIDRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Confirms that the like has been registered successfully.
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "400":
+          description: Invalid request body or argument errors
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Failed to process the like due to internal server error
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: Like an article
+      tags:
+      - Article Management
+  /api/articles/tags:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of article tags, each with a count of articles
+        associated and a list of keywords from those articles. Pagination is applied
+        to the tags.
+      parameters:
+      - description: Page number for tag listing
+        in: query
+        name: page
+        type: integer
+      - description: Number of tags to return per page
+        in: query
+        name: size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Paginated list of tags with associated article counts and article
+            keywords
+          schema:
+            items:
+              $ref: '#/definitions/ctype.TagsResponse'
+            type: array
+        "400":
+          description: Invalid query parameters or binding errors
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Failed to retrieve tags due to internal server error
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: List article tags with article counts
+      tags:
+      - Article Management
+  /api/chat_groups:
+    get:
+      consumes:
+      - application/json
+      description: Upgrades an HTTP connection to a WebSocket connection for real-time
+        chat interactions in a group setting. Automatically assigns a nickname and
+        avatar based on the initial letter of the nickname.
+      produces:
+      - application/json
+      responses:
+        "101":
+          description: WebSocket connection established successfully.
+        "400":
+          description: Failed to upgrade to WebSocket due to request issues.
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: Establish chat group connection
+      tags:
+      - Chat Management
+  /api/chat_groups/records:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a paginated list of chat sessions, specifically for group
+        chats, sorted by creation date in descending order.
+      parameters:
+      - description: Page number of the results
+        in: query
+        name: page
+        type: integer
+      - description: Number of results per page
+        in: query
+        name: size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Paginated list of chat sessions with creation dates and other
+            metadata
+          schema:
+            items:
+              $ref: '#/definitions/models.ChatModel'
+            type: array
+        "400":
+          description: Invalid query parameters or binding errors
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Failed to retrieve chat sessions due to internal server error
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: List chat sessions
+      tags:
+      - Chat Management
+  /api/comments:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves all root-level comments for a specified article ID, with
+        an option to filter and sort based on query parameters.
+      parameters:
+      - description: The ID of the article for which comments are being retrieved
+        in: query
+        name: article_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of root comments for the specified article
+          schema:
+            items:
+              $ref: '#/definitions/models.CommentModel'
+            type: array
+        "400":
+          description: Invalid query parameters or binding errors
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Failed to retrieve comments due to internal server error
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: List comments for an article
+      tags:
+      - Comment Management
+    post:
+      consumes:
+      - application/json
+      description: Adds a new comment to an article, with the ability to specify if
+        the comment is a reply to another comment.
+      parameters:
+      - description: Request body for creating a new comment including article ID,
+          content, and optional parent comment ID
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/ctype.CommentRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Confirms that the comment has been successfully added.
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "400":
+          description: Invalid request body or article/comment ID mismatch
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "404":
+          description: Article or parent comment not found
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Failed to create comment due to internal server error
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: Create a new comment
+      tags:
+      - Comment Management
+  /api/comments/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a comment and all its sub-comments from an article. Adjusts
+        comment counts accordingly in the database and cache.
+      parameters:
+      - description: The ID of the comment to be deleted
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Confirms that the comment and any sub-comments have been successfully
+            deleted.
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "400":
+          description: Invalid comment ID or URI binding errors
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "404":
+          description: Comment not found
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Failed to delete comments due to internal server error
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: Delete a comment
+      tags:
+      - Comment Management
+    get:
+      consumes:
+      - application/json
+      description: Registers a 'like' for a specific comment using its ID, updating
+        the like count in Redis.
+      parameters:
+      - description: The ID of the comment to be liked
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Confirms that the like has been successfully registered for
+            the comment.
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "400":
+          description: Invalid comment ID or URI binding errors
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "404":
+          description: Comment not found
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Failed to like the comment due to internal server error
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: Like a comment
+      tags:
+      - Comment Management
+  /api/images:
+    delete:
+      consumes:
+      - application/json
+      description: Used for users to delete images
+      parameters:
+      - description: IDs of images to delete
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/ctype.DeleteRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Images deleted successfully
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "404":
+          description: Images not found
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: Images Delete
+      tags:
+      - Image Management
+    get:
+      consumes:
+      - application/json
+      description: Used for users to query images
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Page size
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful operation
+          schema:
+            allOf:
+            - $ref: '#/definitions/resp.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/resp.ListResponse-models_BannerModel'
+              type: object
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: Image List
+      tags:
+      - Image Management
+    put:
+      consumes:
+      - application/json
+      description: Used for users to update image information
+      parameters:
+      - description: Image update parameters
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/ctype.ImageUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Image update successful
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "404":
+          description: Image not found
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: Image Update
+      tags:
+      - Image Management
+  /api/images/:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Used for users to upload images
+      parameters:
+      - description: List of images to upload
+        in: formData
+        name: images
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Upload successful
+          schema:
+            allOf:
+            - $ref: '#/definitions/resp.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/ctype.FileUploadResponse'
+                  type: array
+              type: object
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: Image Upload
+      tags:
+      - Image Management
+  /api/images_name:
+    get:
+      description: Return the name list of images
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful operation
+          schema:
+            allOf:
+            - $ref: '#/definitions/resp.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/ctype.ImageNameResponse'
+                  type: array
+              type: object
+      summary: Image Name List
+      tags:
+      - Image Management
+  /api/menu_names:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of all menus, providing basic details like ID,
+        title, and path.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: A list of menu names including IDs and paths.
+          schema:
+            items:
+              $ref: '#/definitions/ctype.MenuNameResponse'
+            type: array
+        "500":
+          description: Internal server error.
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: List menu names
+      tags:
+      - Menu Management
+  /api/menus:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes menu entries and their associated banners based on the
+        provided list of menu IDs.
+      parameters:
+      - description: Request body for deleting menus, includes list of menu IDs
+        in: body
+        name: delete
+        required: true
+        schema:
+          $ref: '#/definitions/ctype.DeleteRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Deletion successful with the number of menus deleted.
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "400":
+          description: Invalid request due to bad input
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "404":
+          description: Menu not found
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Failed to delete menu due to internal server error
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: Delete menus
+      tags:
+      - Menu Management
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a complete list of menus along with their associated
+        banners, sorted by the banner sort order.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: A list of all menus including associated banners.
+          schema:
+            items:
+              $ref: '#/definitions/menu_api.MenuAllResponse'
+            type: array
+        "500":
+          description: Internal server error.
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: List all menus with banners
+      tags:
+      - Menu Management
+    post:
+      consumes:
+      - application/json
+      description: Adds a new menu entry to the database with optional banner images
+        if provided.
+      parameters:
+      - description: Request body for creating a new menu entry
+        in: body
+        name: menu
+        required: true
+        schema:
+          $ref: '#/definitions/ctype.MenuRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Menu created successfully.
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "400":
+          description: Invalid request body
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "409":
+          description: Duplicate menu entries found
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Failed to create menu due to internal server error
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: Create a new menu
+      tags:
+      - Menu Management
+  /api/menus/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves detailed information about a specific menu including
+        its associated banners sorted by their order.
+      parameters:
+      - description: Menu ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Detailed information about the menu including associated banners.
+          schema:
+            $ref: '#/definitions/menu_api.MenuAllResponse'
+        "404":
+          description: Menu does not exist.
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: Get menu details
+      tags:
+      - Menu Management
+  /api/menus{id}:
+    put:
+      consumes:
+      - application/json
+      description: Updates the details of an existing menu and manages its associated
+        banners based on the provided input.
+      parameters:
+      - description: The ID of the menu to update
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Menu update request body containing new details and banner information
+        in: body
+        name: menu
+        required: true
+        schema:
+          $ref: '#/definitions/ctype.MenuRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Update menu successfully.
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "400":
+          description: Invalid input.
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "404":
+          description: Menu does not exist.
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Failed to update menu.
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: Update menu details
+      tags:
+      - Menu Management
+  /api/messages:
+    post:
+      consumes:
+      - application/json
+      description: Sends a new message from one user to another, including sender
+        and receiver details along with the content of the message.
+      parameters:
+      - description: Request body for sending a new message including sender and receiver
+          user IDs, and the content of the message
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/ctype.MessageRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Confirms that the message has been successfully sent.
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "400":
+          description: Invalid request body or user IDs
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "404":
+          description: Sender or receiver not found
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Failed to send the message due to internal server error
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: Send a new message
+      tags:
+      - Message Management
+  /api/messages/history:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the message history between the current user and another
+        specified user, sorting messages by creation date in ascending order and marking
+        them as read.
+      parameters:
+      - description: Request body for retrieving message history including the other
+          user's ID
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/ctype.MessageHistoryRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of messages between the current user and the specified
+            other user
+          schema:
+            items:
+              $ref: '#/definitions/models.MessageModel'
+            type: array
+        "400":
+          description: Invalid request body or user ID
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Failed to retrieve message history due to internal server error
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: Retrieve message history
+      tags:
+      - Message Management
+  /api/messages/list:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of messages for the current user, grouped by conversations
+        with each contact, sorted by creation date in ascending order. Each group
+        includes a summary of the conversation, like the number of messages.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of grouped messages showing conversation summaries with
+            each contact
+          schema:
+            items:
+              $ref: '#/definitions/ctype.Message'
+            type: array
+        "400":
+          description: Invalid authentication or session details
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Failed to list messages due to internal server error
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: List messages grouped by conversation
+      tags:
+      - Message Management
+  /api/messages_all:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a paginated list of all messages across the platform,
+        including details for each message.
+      parameters:
+      - description: Page number of the results
+        in: query
+        name: page
+        type: integer
+      - description: Number of results per page
+        in: query
+        name: size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Paginated list of all messages
+          schema:
+            items:
+              $ref: '#/definitions/models.MessageModel'
+            type: array
+        "400":
+          description: Invalid query parameters or request body
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Failed to retrieve messages due to internal server error
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: List all messages
+      tags:
+      - Message Management
+  /api/tags:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes tags based on a list of tag IDs provided in the request.
+      parameters:
+      - description: Details of the tags to be deleted by ID
+        in: body
+        name: tag
+        required: true
+        schema:
+          $ref: '#/definitions/ctype.DeleteRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully deleted tags with a count of how many were deleted.
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "400":
+          description: Invalid input.
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "404":
+          description: Tag does not exist.
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: Delete tags
+      tags:
+      - Tag Management
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a paginated list of tags based on given pagination parameters.
+      parameters:
+      - description: Page number of the tag list
+        in: query
+        name: page
+        type: integer
+      - description: Number of tags per page
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully retrieved list of tags with pagination.
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "400":
+          description: Invalid query parameters.
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: List tags
+      tags:
+      - Tag Management
+    post:
+      consumes:
+      - application/json
+      description: Creates a new tag with a unique title.
+      parameters:
+      - description: Details of the tag to be created
+        in: body
+        name: tag
+        required: true
+        schema:
+          $ref: '#/definitions/ctype.TagRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully created tag.
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "400":
+          description: Invalid input.
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "409":
+          description: The tag already exists.
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Failed to create tag.
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: Create a new tag
+      tags:
+      - Tag Management
+  /api/tags/{id}:
+    put:
+      consumes:
+      - application/json
+      description: Updates the details of an existing tag based on the tag ID and
+        provided new tag details.
+      parameters:
+      - description: The ID of the tag to update
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: New details for the tag
+        in: body
+        name: tag
+        required: true
+        schema:
+          $ref: '#/definitions/ctype.TagRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'msg: Modify the tag successfully.'
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "400":
+          description: Invalid input.
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "404":
+          description: The tag does not exist.
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Failed to modify tag.
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: Update tag details
+      tags:
+      - Tag Management
+  /api/users:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes specified users and their related data from the system.
+        This includes removing users from message tables, comment tables, user collections,
+        and published articles.
+      parameters:
+      - description: Request body containing the list of user IDs to be deleted
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/ctype.DeleteRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Confirms that the specified users have been successfully deleted
+            from the system.
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "400":
+          description: Invalid request body or user IDs
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "404":
+          description: Specified users not found
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Failed to delete users due to internal server error
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: Delete users by their IDs
+      tags:
+      - User Management
+    get:
+      consumes:
+      - application/json
+      description: Fetches a list of users with optional hiding of sensitive information
+        based on user permissions. Admins can see all details, while non-admin users
+        have sensitive data hidden.
+      parameters:
+      - in: query
+        name: key
+        type: string
+      - in: query
+        name: limit
+        type: integer
+      - in: query
+        name: page
+        type: integer
+      - in: query
+        name: sort
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Returns a list of users with sensitive information hidden based
+            on permissions
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "400":
+          description: Invalid request parameters
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: Retrieve a paginated list of users
+      tags:
+      - User Management
+  /api/users/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticates a user with their username or email and password,
+        and generates a JWT token upon successful login.
+      parameters:
+      - description: Login request payload containing username or email and password
+        in: body
+        name: loginRequest
+        required: true
+        schema:
+          $ref: '#/definitions/ctype.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Returns a JWT token upon successful authentication
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "400":
+          description: Invalid request parameters or authentication failed
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: User login
+      tags:
+      - User Management
+  /api/users/logout:
+    post:
+      consumes:
+      - application/json
+      description: Logs out a user by invalidating the JWT token.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully logged out
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "400":
+          description: Invalid request or failed to logout
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: User logout
+      tags:
+      - User Management
+  /api/users/register:
+    post:
+      consumes:
+      - application/json
+      description: Registers a new user by providing user details and hashed password.
+      parameters:
+      - description: User registration request body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/ctype.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User registered successfully
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "400":
+          description: Invalid request parameters
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Failed to register user
+          schema:
+            $ref: '#/definitions/resp.Response'
+      summary: User registration
+      tags:
+      - User Management
+  /api/users/set_pwd:
+    put:
+      consumes:
+      - application/json
+      description: Updates the password for the currently authenticated user.
+      parameters:
+      - description: Password update request body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/ctype.UpdatePasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Password updated successfully
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "400":
+          description: Invalid request parameters
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "401":
+          description: Unauthorized or incorrect old password
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Failed to update password
+          schema:
+            $ref: '#/definitions/resp.Response'
+      security:
+      - BearerAuth: []
+      summary: Update user password
+      tags:
+      - User Management
+  /api/users/set_status:
+    put:
+      consumes:
+      - application/json
+      description: Updates the status and nickname for a specified user by user ID.
+      parameters:
+      - description: User status update request body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/ctype.UserStatusRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Status and nickname updated successfully
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "400":
+          description: Invalid request parameters
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "401":
+          description: Unauthorized or user does not exist
+          schema:
+            $ref: '#/definitions/resp.Response'
+        "500":
+          description: Failed to update user status
+          schema:
+            $ref: '#/definitions/resp.Response'
+      security:
+      - BearerAuth: []
+      summary: Update user status and nickname
+      tags:
+      - User Management
+swagger: "2.0"

@@ -1,0 +1,3176 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "CryptoCat API docs",
+        "title": "CryptoCat",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "127.0.0.1:8080",
+    "basePath": "/",
+    "paths": {
+        "/api/articles": {
+            "get": {
+                "description": "Retrieves a paginated list of articles based on search criteria such as tags and fields like title and content. The response filters out empty values.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Management"
+                ],
+                "summary": "List articles with pagination and filters",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page number of the results",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Number of results per page",
+                        "name": "size",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Tag to filter articles by",
+                        "name": "tag",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A list of articles with pagination details",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.ArticleModel"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid query parameters or binding errors",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to retrieve articles due to internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Updates an existing article's details such as title, content, banner, and more based on provided values. Empty fields are ignored in the update process.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Management"
+                ],
+                "summary": "Update an article",
+                "parameters": [
+                    {
+                        "description": "Request body for updating an article including new values for fields like title, abstract, banner ID, and more",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ctype.ArticleUpdateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Confirms that the article has been successfully updated.",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request body or argument errors",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Banner or article not found",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to update the article due to internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Adds a new article entry to the ES. The process includes content sanitization to remove potentially harmful scripts, auto-generating an abstract if not provided, and assigning a random banner if none specified.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Management"
+                ],
+                "summary": "Create a new article",
+                "parameters": [
+                    {
+                        "description": "Request body for creating a new article including title, content, and optional banner ID",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ctype.ArticleRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Confirms that the article has been successfully added to the database.",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request body or failure in content sanitization",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Banner or user not found",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "409": {
+                        "description": "Duplicate article entries found",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to create article due to internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete the article from the ES based on the article ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Management"
+                ],
+                "summary": "Delete a new article",
+                "parameters": [
+                    {
+                        "description": "Request body for deleting a new article including title, content, and optional banner ID",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ctype.DeleteIDList"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Confirms that the article has been successfully added to the database.",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request body or failure in content sanitization",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Banner or user not found",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "409": {
+                        "description": "Duplicate article entries found",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to create article due to internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/articles/calendar": {
+            "get": {
+                "description": "Retrieves a calendar view of articles published, showing the count of articles per day from the current date back to one year.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Management"
+                ],
+                "summary": "Get article calendar view",
+                "responses": {
+                    "200": {
+                        "description": "A list of dates and the count of articles published on each date.",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/article_api.CalendarResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid query parameters",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to retrieve data due to internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/articles/collect": {
+            "get": {
+                "description": "Retrieves a list of articles collected by the user, including the article details and the date each was collected.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Management"
+                ],
+                "summary": "Show the list of article collections",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page number of the collection list",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Number of collections per page",
+                        "name": "size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of collected articles with pagination details",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/article_api.CollResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid query parameters or binding errors",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorized access or invalid credentials",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to retrieve collections due to internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Allows a user to either collect or uncollect an article based on its current collection status. If the article is not already collected, it will be collected; if it is already collected, the collection will be cancelled.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Management"
+                ],
+                "summary": "Create article collection",
+                "parameters": [
+                    {
+                        "description": "Request body containing the ID of the article to be collected or uncollected",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ctype.ESIDRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Indicates successful uncollection of the article",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request body or argument errors",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Article not found or no longer available",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to update the collection status due to internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes a batch of article collections based on the list of article IDs provided, and updates the collect count for each article.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Management"
+                ],
+                "summary": "Batch delete article collections",
+                "parameters": [
+                    {
+                        "description": "Request body containing a list of article IDs to be uncollected",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ctype.ESIDListRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Indicates the number of articles successfully uncollected.",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request body or argument errors",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorized request or action not allowed",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to delete collections due to internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/articles/detail": {
+            "get": {
+                "description": "Gets detailed information for a specified article title, including incrementing the view count via Redis.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Management"
+                ],
+                "summary": "Retrieve article details by title",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "The ID of the article to retrieve",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detailed information about the article, including content and metadata",
+                        "schema": {
+                            "$ref": "#/definitions/ctype.ArticleDetailRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid article ID specified",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Article not found",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to retrieve article details due to internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/articles/like": {
+            "post": {
+                "description": "Registers a 'like' for an article by its ID, updating the like count in Redis.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Management"
+                ],
+                "summary": "Like an article",
+                "parameters": [
+                    {
+                        "description": "Request body containing the ID of the article to be liked",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ctype.ESIDRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Confirms that the like has been registered successfully.",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request body or argument errors",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to process the like due to internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/articles/tags": {
+            "get": {
+                "description": "Retrieves a list of article tags, each with a count of articles associated and a list of keywords from those articles. Pagination is applied to the tags.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Management"
+                ],
+                "summary": "List article tags with article counts",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page number for tag listing",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Number of tags to return per page",
+                        "name": "size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Paginated list of tags with associated article counts and article keywords",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ctype.TagsResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid query parameters or binding errors",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to retrieve tags due to internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/articles/{id}": {
+            "get": {
+                "description": "Gets detailed information for a specified article ID, including incrementing the view count via Redis.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article Management"
+                ],
+                "summary": "Retrieve article details by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "The ID of the article to retrieve",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detailed information about the article, including content and metadata",
+                        "schema": {
+                            "$ref": "#/definitions/models.ArticleModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid article ID specified",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Article not found",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to retrieve article details due to internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/chat_groups": {
+            "get": {
+                "description": "Upgrades an HTTP connection to a WebSocket connection for real-time chat interactions in a group setting. Automatically assigns a nickname and avatar based on the initial letter of the nickname.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Chat Management"
+                ],
+                "summary": "Establish chat group connection",
+                "responses": {
+                    "101": {
+                        "description": "WebSocket connection established successfully."
+                    },
+                    "400": {
+                        "description": "Failed to upgrade to WebSocket due to request issues.",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/chat_groups/records": {
+            "get": {
+                "description": "Retrieves a paginated list of chat sessions, specifically for group chats, sorted by creation date in descending order.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Chat Management"
+                ],
+                "summary": "List chat sessions",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page number of the results",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Number of results per page",
+                        "name": "size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Paginated list of chat sessions with creation dates and other metadata",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.ChatModel"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid query parameters or binding errors",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to retrieve chat sessions due to internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/comments": {
+            "get": {
+                "description": "Retrieves all root-level comments for a specified article ID, with an option to filter and sort based on query parameters.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Comment Management"
+                ],
+                "summary": "List comments for an article",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "The ID of the article for which comments are being retrieved",
+                        "name": "article_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of root comments for the specified article",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.CommentModel"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid query parameters or binding errors",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to retrieve comments due to internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Adds a new comment to an article, with the ability to specify if the comment is a reply to another comment.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Comment Management"
+                ],
+                "summary": "Create a new comment",
+                "parameters": [
+                    {
+                        "description": "Request body for creating a new comment including article ID, content, and optional parent comment ID",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ctype.CommentRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Confirms that the comment has been successfully added.",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request body or article/comment ID mismatch",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Article or parent comment not found",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to create comment due to internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/comments/{id}": {
+            "get": {
+                "description": "Registers a 'like' for a specific comment using its ID, updating the like count in Redis.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Comment Management"
+                ],
+                "summary": "Like a comment",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "The ID of the comment to be liked",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Confirms that the like has been successfully registered for the comment.",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid comment ID or URI binding errors",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Comment not found",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to like the comment due to internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes a comment and all its sub-comments from an article. Adjusts comment counts accordingly in the database and cache.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Comment Management"
+                ],
+                "summary": "Delete a comment",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "The ID of the comment to be deleted",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Confirms that the comment and any sub-comments have been successfully deleted.",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid comment ID or URI binding errors",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Comment not found",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to delete comments due to internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/images": {
+            "get": {
+                "description": "Used for users to query images",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Image Management"
+                ],
+                "summary": "Image List",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 10,
+                        "description": "Page size",
+                        "name": "pageSize",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/resp.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/resp.ListResponse-models_BannerModel"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Used for users to update image information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Image Management"
+                ],
+                "summary": "Image Update",
+                "parameters": [
+                    {
+                        "description": "Image update parameters",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ctype.ImageUpdateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Image update successful",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Image not found",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Used for users to delete images",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Image Management"
+                ],
+                "summary": "Images Delete",
+                "parameters": [
+                    {
+                        "description": "IDs of images to delete",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ctype.DeleteRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Images deleted successfully",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Images not found",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/images/": {
+            "post": {
+                "description": "Used for users to upload images",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Image Management"
+                ],
+                "summary": "Image Upload",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "List of images to upload",
+                        "name": "images",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Upload successful",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/resp.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/ctype.FileUploadResponse"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/images_name": {
+            "get": {
+                "description": "Return the name list of images",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Image Management"
+                ],
+                "summary": "Image Name List",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/resp.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/ctype.ImageNameResponse"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/menu_names": {
+            "get": {
+                "description": "Retrieves a list of all menus, providing basic details like ID, title, and path.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Menu Management"
+                ],
+                "summary": "List menu names",
+                "responses": {
+                    "200": {
+                        "description": "A list of menu names including IDs and paths.",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ctype.MenuNameResponse"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error.",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/menus": {
+            "get": {
+                "description": "Retrieves a complete list of menus along with their associated banners, sorted by the banner sort order.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Menu Management"
+                ],
+                "summary": "List all menus with banners",
+                "responses": {
+                    "200": {
+                        "description": "A list of all menus including associated banners.",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/menu_api.MenuAllResponse"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error.",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Adds a new menu entry to the database with optional banner images if provided.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Menu Management"
+                ],
+                "summary": "Create a new menu",
+                "parameters": [
+                    {
+                        "description": "Request body for creating a new menu entry",
+                        "name": "menu",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ctype.MenuRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Menu created successfully.",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request body",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "409": {
+                        "description": "Duplicate menu entries found",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to create menu due to internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes menu entries and their associated banners based on the provided list of menu IDs.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Menu Management"
+                ],
+                "summary": "Delete menus",
+                "parameters": [
+                    {
+                        "description": "Request body for deleting menus, includes list of menu IDs",
+                        "name": "delete",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ctype.DeleteRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Deletion successful with the number of menus deleted.",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request due to bad input",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Menu not found",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to delete menu due to internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/menus/{id}": {
+            "get": {
+                "description": "Retrieves detailed information about a specific menu including its associated banners sorted by their order.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Menu Management"
+                ],
+                "summary": "Get menu details",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Menu ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detailed information about the menu including associated banners.",
+                        "schema": {
+                            "$ref": "#/definitions/menu_api.MenuAllResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Menu does not exist.",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/menus{id}": {
+            "put": {
+                "description": "Updates the details of an existing menu and manages its associated banners based on the provided input.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Menu Management"
+                ],
+                "summary": "Update menu details",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "The ID of the menu to update",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Menu update request body containing new details and banner information",
+                        "name": "menu",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ctype.MenuRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Update menu successfully.",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input.",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Menu does not exist.",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to update menu.",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/messages": {
+            "post": {
+                "description": "Sends a new message from one user to another, including sender and receiver details along with the content of the message.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Message Management"
+                ],
+                "summary": "Send a new message",
+                "parameters": [
+                    {
+                        "description": "Request body for sending a new message including sender and receiver user IDs, and the content of the message",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ctype.MessageRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Confirms that the message has been successfully sent.",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request body or user IDs",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Sender or receiver not found",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to send the message due to internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/messages/history": {
+            "get": {
+                "description": "Retrieves the message history between the current user and another specified user, sorting messages by creation date in ascending order and marking them as read.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Message Management"
+                ],
+                "summary": "Retrieve message history",
+                "parameters": [
+                    {
+                        "description": "Request body for retrieving message history including the other user's ID",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ctype.MessageHistoryRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of messages between the current user and the specified other user",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.MessageModel"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request body or user ID",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to retrieve message history due to internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/messages/list": {
+            "get": {
+                "description": "Retrieves a list of messages for the current user, grouped by conversations with each contact, sorted by creation date in ascending order. Each group includes a summary of the conversation, like the number of messages.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Message Management"
+                ],
+                "summary": "List messages grouped by conversation",
+                "responses": {
+                    "200": {
+                        "description": "List of grouped messages showing conversation summaries with each contact",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ctype.Message"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid authentication or session details",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to list messages due to internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/messages_all": {
+            "get": {
+                "description": "Retrieves a paginated list of all messages across the platform, including details for each message.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Message Management"
+                ],
+                "summary": "List all messages",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page number of the results",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Number of results per page",
+                        "name": "size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Paginated list of all messages",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.MessageModel"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid query parameters or request body",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to retrieve messages due to internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/tags": {
+            "get": {
+                "description": "Retrieves a paginated list of tags based on given pagination parameters.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tag Management"
+                ],
+                "summary": "List tags",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page number of the tag list",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Number of tags per page",
+                        "name": "pageSize",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved list of tags with pagination.",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid query parameters.",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Creates a new tag with a unique title.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tag Management"
+                ],
+                "summary": "Create a new tag",
+                "parameters": [
+                    {
+                        "description": "Details of the tag to be created",
+                        "name": "tag",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ctype.TagRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully created tag.",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input.",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "409": {
+                        "description": "The tag already exists.",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to create tag.",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes tags based on a list of tag IDs provided in the request.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tag Management"
+                ],
+                "summary": "Delete tags",
+                "parameters": [
+                    {
+                        "description": "Details of the tags to be deleted by ID",
+                        "name": "tag",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ctype.DeleteRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully deleted tags with a count of how many were deleted.",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input.",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Tag does not exist.",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/tags/{id}": {
+            "put": {
+                "description": "Updates the details of an existing tag based on the tag ID and provided new tag details.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tag Management"
+                ],
+                "summary": "Update tag details",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "The ID of the tag to update",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "New details for the tag",
+                        "name": "tag",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ctype.TagRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "msg: Modify the tag successfully.",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input.",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "The tag does not exist.",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to modify tag.",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users": {
+            "get": {
+                "description": "Fetches a list of users with optional hiding of sensitive information based on user permissions. Admins can see all details, while non-admin users have sensitive data hidden.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Management"
+                ],
+                "summary": "Retrieve a paginated list of users",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "key",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "sort",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns a list of users with sensitive information hidden based on permissions",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request parameters",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes specified users and their related data from the system. This includes removing users from message tables, comment tables, user collections, and published articles.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Management"
+                ],
+                "summary": "Delete users by their IDs",
+                "parameters": [
+                    {
+                        "description": "Request body containing the list of user IDs to be deleted",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ctype.DeleteRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Confirms that the specified users have been successfully deleted from the system.",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request body or user IDs",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Specified users not found",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to delete users due to internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/login": {
+            "post": {
+                "description": "Authenticates a user with their username or email and password, and generates a JWT token upon successful login.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Management"
+                ],
+                "summary": "User login",
+                "parameters": [
+                    {
+                        "description": "Login request payload containing username or email and password",
+                        "name": "loginRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ctype.LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns a JWT token upon successful authentication",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request parameters or authentication failed",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/logout": {
+            "post": {
+                "description": "Logs out a user by invalidating the JWT token.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Management"
+                ],
+                "summary": "User logout",
+                "responses": {
+                    "200": {
+                        "description": "Successfully logged out",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request or failed to logout",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/register": {
+            "post": {
+                "description": "Registers a new user by providing user details and hashed password.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Management"
+                ],
+                "summary": "User registration",
+                "parameters": [
+                    {
+                        "description": "User registration request body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ctype.RegisterRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User registered successfully",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request parameters",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to register user",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/set_pwd": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Updates the password for the currently authenticated user.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Management"
+                ],
+                "summary": "Update user password",
+                "parameters": [
+                    {
+                        "description": "Password update request body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ctype.UpdatePasswordRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Password updated successfully",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request parameters",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized or incorrect old password",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to update password",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/set_status": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Updates the status and nickname for a specified user by user ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User Management"
+                ],
+                "summary": "Update user status and nickname",
+                "parameters": [
+                    {
+                        "description": "User status update request body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ctype.UserStatusRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Status and nickname updated successfully",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request parameters",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized or user does not exist",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to update user status",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "article_api.CalendarResponse": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "date": {
+                    "type": "string"
+                }
+            }
+        },
+        "article_api.CollResponse": {
+            "type": "object",
+            "properties": {
+                "abstract": {
+                    "description": "文章简介",
+                    "type": "string"
+                },
+                "banner_id": {
+                    "description": "文章封面id",
+                    "type": "integer"
+                },
+                "banner_url": {
+                    "description": "文章封面",
+                    "type": "string"
+                },
+                "category": {
+                    "description": "文章分类",
+                    "type": "string"
+                },
+                "collects_count": {
+                    "description": "收藏量",
+                    "type": "integer"
+                },
+                "comment_count": {
+                    "description": "评论量",
+                    "type": "integer"
+                },
+                "content": {
+                    "description": "文章内容",
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "description": "es的id",
+                    "type": "string"
+                },
+                "keyword": {
+                    "description": "关键字",
+                    "type": "string"
+                },
+                "like_count": {
+                    "description": "点赞量",
+                    "type": "integer"
+                },
+                "link": {
+                    "description": "原文链接",
+                    "type": "string"
+                },
+                "look_count": {
+                    "description": "浏览量",
+                    "type": "integer"
+                },
+                "source": {
+                    "description": "文章来源",
+                    "type": "string"
+                },
+                "tags": {
+                    "description": "文章标签",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "title": {
+                    "description": "文章标题",
+                    "type": "string"
+                },
+                "updated_at": {
+                    "description": "更新时间",
+                    "type": "string"
+                },
+                "user_avatar": {
+                    "description": "用户头像",
+                    "type": "string"
+                },
+                "user_id": {
+                    "description": "用户id",
+                    "type": "integer"
+                },
+                "user_nick_name": {
+                    "description": "用户昵称",
+                    "type": "string"
+                }
+            }
+        },
+        "ctype.ArticleDetailRequest": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "ctype.ArticleRequest": {
+            "type": "object",
+            "required": [
+                "content",
+                "title"
+            ],
+            "properties": {
+                "abstract": {
+                    "description": "文章简介",
+                    "type": "string"
+                },
+                "banner_id": {
+                    "description": "文章封面id",
+                    "type": "integer"
+                },
+                "category": {
+                    "description": "文章分类",
+                    "type": "string"
+                },
+                "content": {
+                    "description": "文章内容",
+                    "type": "string"
+                },
+                "link": {
+                    "description": "原文链接",
+                    "type": "string"
+                },
+                "source": {
+                    "description": "文章来源",
+                    "type": "string"
+                },
+                "tags": {
+                    "description": "文章标签",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "title": {
+                    "description": "文章标题",
+                    "type": "string"
+                }
+            }
+        },
+        "ctype.ArticleUpdateRequest": {
+            "type": "object",
+            "properties": {
+                "abstract": {
+                    "description": "文章简介",
+                    "type": "string"
+                },
+                "banner_id": {
+                    "description": "文章封面id",
+                    "type": "integer"
+                },
+                "category": {
+                    "description": "文章分类",
+                    "type": "string"
+                },
+                "content": {
+                    "description": "文章内容",
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "link": {
+                    "description": "原文链接",
+                    "type": "string"
+                },
+                "source": {
+                    "description": "文章来源",
+                    "type": "string"
+                },
+                "tags": {
+                    "description": "文章标签",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "title": {
+                    "description": "文章标题",
+                    "type": "string"
+                }
+            }
+        },
+        "ctype.CommentRequest": {
+            "type": "object",
+            "required": [
+                "article_id",
+                "content"
+            ],
+            "properties": {
+                "article_id": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "parent_comment_id": {
+                    "description": "父评论id",
+                    "type": "integer"
+                }
+            }
+        },
+        "ctype.DeleteIDList": {
+            "type": "object",
+            "properties": {
+                "id_list": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "ctype.DeleteRequest": {
+            "type": "object",
+            "properties": {
+                "id_list": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "ctype.ESIDListRequest": {
+            "type": "object",
+            "required": [
+                "id_list"
+            ],
+            "properties": {
+                "id_list": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "ctype.ESIDRequest": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "ctype.FileUploadResponse": {
+            "type": "object",
+            "properties": {
+                "file_name": {
+                    "type": "string"
+                },
+                "is_success": {
+                    "type": "boolean"
+                },
+                "msg": {
+                    "type": "string"
+                }
+            }
+        },
+        "ctype.ImageNameResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                }
+            }
+        },
+        "ctype.ImageSort": {
+            "type": "object",
+            "properties": {
+                "image_id": {
+                    "type": "integer"
+                },
+                "sort": {
+                    "type": "integer"
+                }
+            }
+        },
+        "ctype.ImageType": {
+            "type": "integer",
+            "enum": [
+                1,
+                2
+            ],
+            "x-enum-comments": {
+                "Local": "本地",
+                "Qiniu": "七牛云"
+            },
+            "x-enum-varnames": [
+                "Local",
+                "Qiniu"
+            ]
+        },
+        "ctype.ImageUpdateRequest": {
+            "type": "object",
+            "required": [
+                "id",
+                "name"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "ctype.LoginRequest": {
+            "type": "object",
+            "required": [
+                "password",
+                "user_name"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "user_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "ctype.MenuNameResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "ctype.MenuRequest": {
+            "type": "object",
+            "required": [
+                "path",
+                "sort",
+                "title"
+            ],
+            "properties": {
+                "abstract": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "abstract_time": {
+                    "description": "切换的时间，单位秒",
+                    "type": "integer"
+                },
+                "banner_time": {
+                    "description": "切换的时间，单位秒",
+                    "type": "integer"
+                },
+                "image_sort_list": {
+                    "description": "具体图片的顺序",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ctype.ImageSort"
+                    }
+                },
+                "path": {
+                    "type": "string"
+                },
+                "slogan": {
+                    "type": "string"
+                },
+                "sort": {
+                    "description": "菜单的序号",
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "ctype.Message": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "description": "消息内容",
+                    "type": "string"
+                },
+                "created_at": {
+                    "description": "最新的消息时间",
+                    "type": "string"
+                },
+                "message_count": {
+                    "description": "消息条数",
+                    "type": "integer"
+                },
+                "rev_user_avatar": {
+                    "type": "string"
+                },
+                "rev_user_id": {
+                    "description": "接收人id",
+                    "type": "integer"
+                },
+                "rev_user_nick_name": {
+                    "type": "string"
+                },
+                "send_user_avatar": {
+                    "type": "string"
+                },
+                "send_user_id": {
+                    "description": "发送人id",
+                    "type": "integer"
+                },
+                "send_user_nick_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "ctype.MessageHistoryRequest": {
+            "type": "object",
+            "required": [
+                "user_id"
+            ],
+            "properties": {
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "ctype.MessageRequest": {
+            "type": "object",
+            "required": [
+                "content",
+                "rev_user_id",
+                "send_user_id"
+            ],
+            "properties": {
+                "content": {
+                    "description": "消息内容",
+                    "type": "string"
+                },
+                "rev_user_id": {
+                    "description": "接收人id",
+                    "type": "integer"
+                },
+                "send_user_id": {
+                    "description": "发送人id",
+                    "type": "integer"
+                }
+            }
+        },
+        "ctype.MsgType": {
+            "type": "integer",
+            "enum": [
+                1,
+                2,
+                3,
+                4,
+                5
+            ],
+            "x-enum-comments": {
+                "ImageMsg": "发送图片",
+                "InRoomMsg": "进入聊天室",
+                "OutRoomMsg": "退出聊天室",
+                "SystemMsg": "发送系统消息",
+                "TextMsg": "发送文本消息"
+            },
+            "x-enum-varnames": [
+                "InRoomMsg",
+                "TextMsg",
+                "ImageMsg",
+                "SystemMsg",
+                "OutRoomMsg"
+            ]
+        },
+        "ctype.RegisterRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "nick_name",
+                "password",
+                "username"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "nick_name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "ctype.SignStatus": {
+            "type": "integer",
+            "enum": [
+                1,
+                2,
+                3
+            ],
+            "x-enum-comments": {
+                "SignEmail": "email",
+                "SignGitee": "gitee",
+                "SignQQ": "QQ"
+            },
+            "x-enum-varnames": [
+                "SignQQ",
+                "SignGitee",
+                "SignEmail"
+            ]
+        },
+        "ctype.Status": {
+            "type": "integer",
+            "enum": [
+                1,
+                2,
+                3,
+                4
+            ],
+            "x-enum-comments": {
+                "PermissionAdmin": "Admin",
+                "PermissionForbiddenUser": "Forbidden User",
+                "PermissionUser": "User",
+                "PermissionVisitor": "Visitor"
+            },
+            "x-enum-varnames": [
+                "PermissionAdmin",
+                "PermissionUser",
+                "PermissionVisitor",
+                "PermissionForbiddenUser"
+            ]
+        },
+        "ctype.TagRequest": {
+            "type": "object",
+            "required": [
+                "title"
+            ],
+            "properties": {
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "ctype.TagsResponse": {
+            "type": "object",
+            "properties": {
+                "article_id_list": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "count": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "tag": {
+                    "type": "string"
+                }
+            }
+        },
+        "ctype.UpdatePasswordRequest": {
+            "type": "object",
+            "properties": {
+                "new_pwd": {
+                    "description": "新密码",
+                    "type": "string"
+                },
+                "old_pwd": {
+                    "description": "旧密码",
+                    "type": "string"
+                }
+            }
+        },
+        "ctype.UserStatusRequest": {
+            "type": "object",
+            "required": [
+                "status",
+                "user_id"
+            ],
+            "properties": {
+                "nick_name": {
+                    "description": "防止用户昵称非法，管理员有能力修改",
+                    "type": "string"
+                },
+                "status": {
+                    "enum": [
+                        1,
+                        2,
+                        3,
+                        4
+                    ],
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/ctype.Status"
+                        }
+                    ]
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "menu_api.Banner": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "path": {
+                    "type": "string"
+                }
+            }
+        },
+        "menu_api.MenuAllResponse": {
+            "type": "object",
+            "properties": {
+                "abstract": {
+                    "description": "简介",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "abstract_time": {
+                    "description": "简介的切换时间",
+                    "type": "integer"
+                },
+                "banner_time": {
+                    "description": "菜单图片的切换时间 为 0 表示不切换",
+                    "type": "integer"
+                },
+                "banners": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/menu_api.Banner"
+                    }
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "slogan": {
+                    "description": "slogan",
+                    "type": "string"
+                },
+                "sort": {
+                    "description": "菜单的顺序",
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.ArticleModel": {
+            "type": "object",
+            "properties": {
+                "abstract": {
+                    "description": "文章简介",
+                    "type": "string"
+                },
+                "banner_id": {
+                    "description": "文章封面id",
+                    "type": "integer"
+                },
+                "banner_url": {
+                    "description": "文章封面",
+                    "type": "string"
+                },
+                "category": {
+                    "description": "文章分类",
+                    "type": "string"
+                },
+                "collects_count": {
+                    "description": "收藏量",
+                    "type": "integer"
+                },
+                "comment_count": {
+                    "description": "评论量",
+                    "type": "integer"
+                },
+                "content": {
+                    "description": "文章内容",
+                    "type": "string"
+                },
+                "created_at": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "es的id",
+                    "type": "string"
+                },
+                "keyword": {
+                    "description": "关键字",
+                    "type": "string"
+                },
+                "like_count": {
+                    "description": "点赞量",
+                    "type": "integer"
+                },
+                "link": {
+                    "description": "原文链接",
+                    "type": "string"
+                },
+                "look_count": {
+                    "description": "浏览量",
+                    "type": "integer"
+                },
+                "source": {
+                    "description": "文章来源",
+                    "type": "string"
+                },
+                "tags": {
+                    "description": "文章标签",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "title": {
+                    "description": "文章标题",
+                    "type": "string"
+                },
+                "updated_at": {
+                    "description": "更新时间",
+                    "type": "string"
+                },
+                "user_avatar": {
+                    "description": "用户头像",
+                    "type": "string"
+                },
+                "user_id": {
+                    "description": "用户id",
+                    "type": "integer"
+                },
+                "user_nick_name": {
+                    "description": "用户昵称",
+                    "type": "string"
+                }
+            }
+        },
+        "models.BannerModel": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "hash": {
+                    "description": "图片的hash值，用于判断重复图片",
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "image_type": {
+                    "description": "图片的类型， 本地还是七牛",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/ctype.ImageType"
+                        }
+                    ]
+                },
+                "name": {
+                    "description": "图片名称",
+                    "type": "string"
+                },
+                "path": {
+                    "description": "图片路径",
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.ChatModel": {
+            "type": "object",
+            "properties": {
+                "addr": {
+                    "type": "string"
+                },
+                "avatar": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "ip": {
+                    "type": "string"
+                },
+                "is_group": {
+                    "description": "是否是群组消息",
+                    "type": "boolean"
+                },
+                "msg_type": {
+                    "$ref": "#/definitions/ctype.MsgType"
+                },
+                "nick_name": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.CommentModel": {
+            "type": "object",
+            "properties": {
+                "article_id": {
+                    "description": "文章id",
+                    "type": "string"
+                },
+                "comment_count": {
+                    "description": "子评论数",
+                    "type": "integer"
+                },
+                "comment_model": {
+                    "description": "父级评论",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/models.CommentModel"
+                        }
+                    ]
+                },
+                "content": {
+                    "description": "评论内容",
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "like_count": {
+                    "description": "点赞数",
+                    "type": "integer"
+                },
+                "parent_comment_id": {
+                    "description": "父评论id",
+                    "type": "integer"
+                },
+                "sub_comments": {
+                    "description": "子评论列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.CommentModel"
+                    }
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "user": {
+                    "description": "关联的用户",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/models.UserModel"
+                        }
+                    ]
+                },
+                "user_id": {
+                    "description": "评论的用户",
+                    "type": "integer"
+                }
+            }
+        },
+        "models.MessageModel": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "description": "消息内容",
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "is_read": {
+                    "description": "接收方是否查看",
+                    "type": "boolean"
+                },
+                "rev_user_avatar": {
+                    "type": "string"
+                },
+                "rev_user_id": {
+                    "description": "接收人id",
+                    "type": "integer"
+                },
+                "rev_user_nick_name": {
+                    "type": "string"
+                },
+                "send_user_avatar": {
+                    "type": "string"
+                },
+                "send_user_id": {
+                    "description": "发送人id",
+                    "type": "integer"
+                },
+                "send_user_nick_name": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.UserModel": {
+            "type": "object",
+            "properties": {
+                "addr": {
+                    "type": "string"
+                },
+                "avatar": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "ip": {
+                    "type": "string"
+                },
+                "nick_name": {
+                    "type": "string"
+                },
+                "sign_status": {
+                    "$ref": "#/definitions/ctype.SignStatus"
+                },
+                "status": {
+                    "$ref": "#/definitions/ctype.Status"
+                },
+                "tel": {
+                    "type": "string"
+                },
+                "token": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "user_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "resp.ListResponse-models_BannerModel": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "list": {
+                    "$ref": "#/definitions/models.BannerModel"
+                }
+            }
+        },
+        "resp.Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {},
+                "msg": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

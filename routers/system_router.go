@@ -5,6 +5,7 @@ import (
 )
 
 func (router RouterGroup) SystemRouter() {
-	systemsApi := api.MyApigroup.SystemsApi
-	router.GET("", systemsApi.SystemsInfoView)
+	systemsApi := api.MyApiGroup.SystemsApi
+	router.GET("/settings/:name", systemsApi.SystemsInfoView)
+	router.PUT("/settings/:name", systemsApi.SystemUpdateView)
 }
